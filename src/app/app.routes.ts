@@ -9,11 +9,11 @@ export const routes: Routes = [
   },
   {
     canActivateChild: [privateGuard()],
-    path: '',
+    path: 'dashboard',
     loadChildren: () => import('./intranet/features/intranet.routes'),
   },
   {
     path: '**',
-    redirectTo: 'intranet',
+    redirectTo: 'dashboard',
   },
 ];

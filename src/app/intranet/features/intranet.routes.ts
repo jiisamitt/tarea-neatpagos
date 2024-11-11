@@ -2,15 +2,15 @@ import { Routes } from '@angular/router';
 
 export default [
   {
-    path: 'dashboard',
+    path: '',
     loadComponent: () => import('./dashboard/dashboard.component'),
   },
   {
-    path: 'dashboard/history',
+    path: 'history',
     loadComponent: () => import('./history/history.component'),
   },
   {
-    path: 'dashboard/trade',
+    path: 'trade',
     loadComponent: () => import('./trade/trade.component'),
   },
 ] as Routes;
