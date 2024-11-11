@@ -7,8 +7,12 @@ import {
 } from '@angular/forms';
 
 import { hasEmailError, isRequired } from '../../utils/validators';
+import { AuthService } from '../../data-access/auth.service';
+import { Router } from '@angular/router';
+import { toast } from 'ngx-sonner';
+import { GoogleButtonComponent } from '../../ui/google-button/google-button.component';
 
-interface FormSignIn {
+export interface FormSignIn {
   email: FormControl<string | null>;
   password: FormControl<string | null>;
 }
@@ -16,12 +20,14 @@ interface FormSignIn {
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, GoogleButtonComponent],
   templateUrl: './sign-in.component.html',
   styles: ``,
 })
 export default class SignInComponent {
   private _formBuilder = inject(FormBuilder);
+  private _authService = inject(AuthService);
+  private _router = inject(Router);
 
   isRequired(field: 'email' | 'password') {
     return isRequired(field, this.form);
@@ -31,7 +37,7 @@ export default class SignInComponent {
     return hasEmailError(this.form);
   }
 
-  form = this._formBuilder.group<any>({
+  form = this._formBuilder.group<FormSignIn>({
     email: this._formBuilder.control('', [
       Validators.required,
       Validators.email,
@@ -39,13 +45,34 @@ export default class SignInComponent {
     password: this._formBuilder.control('', [Validators.required]),
   });
 
-  submit() {
-    if (this.form.invalid) return;
+  async submit() {
+    if (this.form.invalid) {
+      console.log('error');
+      return;
+    }
 
-    const { email, password } = this.form.value;
+    try {
+      const { email, password } = this.form.value;
 
-    if (!email || !password) return;
+      if (!email || !password) return;
 
-    console.log(email, password);
+      await this._authService.signIn({ email, password });
+      toast.success('¡Sesión iniciada correctamente!');
+
+      this._router.navigate(['/dashboard']);
+    } catch (error) {
+      console.error('error');
+      toast.error('Error al iniciar sesión');
+    }
+  }
+
+  async submitWithGoogle() {
+    try {
+      await this._authService.signInWithGoogle();
+      toast.success('¡Bienvenido!');
+      this._router.navigateByUrl('/dashboard');
+    } catch (error) {
+      toast.error('Ocurrio un error');
+    }
   }
 }

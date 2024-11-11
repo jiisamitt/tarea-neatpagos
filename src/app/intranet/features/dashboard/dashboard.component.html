@@ -1,0 +1,75 @@
+<div class="p-4 mx-4">
+  <h1 class="text-2xl text-slate-300 font-bold mb-4">CryptoNeat</h1>
+
+  <!-- Cryptocurrency information -->
+  <div *ngIf="cryptocurrencyData" class="font-sans mb-4">
+    <ul class="grid grid-cols-2 gap-4 w-40vw">
+      <li
+        *ngFor="let coin of cryptocurrencyData"
+        class="border-2 border-slate-400 rounded-lg shadow-lg px-3 py-2 font-bold"
+      >
+        <div class="flex items-center">
+          <img class="w-6 mr-2" src="{{ coin.image }}" alt="coin image" />
+          <h3>{{ coin.symbol.toUpperCase() }}</h3>
+        </div>
+        <p class="mb-2 text-gray-400">{{ coin.name }}</p>
+        <p class="text-slate-400">
+          ${{ prettyNumber(coin.current_price) }} USD
+        </p>
+      </li>
+    </ul>
+  </div>
+
+  <!-- User information -->
+  <div class="mb-4">
+    <h2 class="text-2xl text-slate-300 font-bold mb-2">Saldo disponible:</h2>
+    <p *ngIf="user" class="text-lg font-bold text-nowrap">
+      ${{ prettyNumber(user?.capital) }} USD
+    </p>
+  </div>
+
+  <h2 class="text-2xl text-slate-300 font-bold mb-2">Tus Criptomonedas</h2>
+  <div
+    *ngIf="user?.currencies"
+    class="mb-4 border-2 border-slate-400 rounded-lg px-3 py-2"
+  >
+    <div class="grid grid-cols-3 gap-4 border-b border-slate-400 py-2">
+      <div class="font-bold">Cripto</div>
+      <div class="font-bold">Cantidad</div>
+      <div class="font-bold">Valor</div>
+    </div>
+    <div
+      class="text-slate-400 grid grid-cols-3 gap-4 border-b border-slate-400 py-2"
+      [class.border-b-0]="isLast"
+      *ngFor="let currency of user?.currencies | keyvalue; let isLast = last"
+    >
+      <div>{{ currency.key }}</div>
+      <div>{{ currency.value }}</div>
+      <div>
+        ${{ prettyNumber(calculateValue(currency.key, currency.value)) }} USD
+      </div>
+    </div>
+  </div>
+  <!-- Logout and navigation -->
+  <button
+    type="button"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+    (click)="goToTrade()"
+  >
+    Comprar y vender
+  </button>
+  <button
+    type="button"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+    (click)="goToHistory()"
+  >
+    Historial de compras
+  </button>
+  <button
+    type="button"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+    (click)="logOut()"
+  >
+    Cerrar sesión
+  </button>
+</div>

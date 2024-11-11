@@ -1,0 +1,10 @@
+{
+  "/market-activity/cryptocurrency": {
+    "target": "https://www.nasdaq.com",
+    "secure": true,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/market-activity/cryptocurrency": "/market-activity/cryptocurrency"
+    }
+  }
+}

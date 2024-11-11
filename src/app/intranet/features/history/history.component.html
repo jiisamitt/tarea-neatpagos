@@ -1,0 +1,50 @@
+<div *ngIf="transactions" class="p-4 mx-4">
+  <h2 class="text-2xl text-slate-300 font-bold mb-4">
+    Historial de transacciones
+  </h2>
+  <ul class="max-h-[80vh] overflow-auto">
+    <li
+      *ngFor="let transaction of transactions"
+      class="border-2 p-4 mb-4 rounded-lg shadow-lg"
+      [class.border-rose-300]="transaction.type === 'sold'"
+      [class.border-teal-300]="transaction.type === 'bought'"
+    >
+      <div class="flex justify-between mb-4">
+        <span class="font-bold text-slate-300">{{
+          transaction.type === "bought" ? "COMPRA" : "VENTA"
+        }}</span>
+        <span class="text-slate-600">{{
+          formatDateTime(transaction.date) | date : "yyyy-MM-dd HH:mm:ss"
+        }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-bold text-slate-400">Cripto:</span>
+        <span class="text-slate-400">{{
+          transaction.currency.toUpperCase()
+        }}</span>
+      </div>
+      <div class="flex justify-between">
+        <span class="font-bold text-slate-400">Valor:</span>
+        <span class="text-slate-400"
+          >${{ prettyNumber(transaction.price) }} USD</span
+        >
+      </div>
+      <div class="flex justify-between">
+        <span class="font-bold text-slate-400">Cantidad:</span>
+        <span
+          [class.text-rose-300]="transaction.amount < 0"
+          [class.text-teal-300]="transaction.amount > 0"
+          >{{ prettyNumber(transaction.amount) }}</span
+        >
+      </div>
+    </li>
+  </ul>
+  <!-- navigation -->
+  <button
+    type="button"
+    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
+    (click)="goToDashboard()"
+  >
+    Vuelve al menú principal
+  </button>
+</div>
